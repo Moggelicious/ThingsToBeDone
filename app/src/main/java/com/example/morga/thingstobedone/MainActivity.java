@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
+import io.realm.Realm;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -26,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        // 'realm' is a field variable
+        realm = Realm.getInstance(this);
+        RealmResults<TodoItem> toDoItems = realm
+                .where(TodoItem.class)
+                .findAllSorted("id", true);
+        ToDoRealmAdapter toDoRealmAdapter = new ToDoRealmAdapter(this, toDoItems, true, true);
+        RealmRecyclerView realmRecyclerView = (RealmRecyclerView) findViewById(R.id.realm_recycler_view);
+        realmRecyclerView.setAdapter(toDoRealmAdapter);
     }
 
     @Override

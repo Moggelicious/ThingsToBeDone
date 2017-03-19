@@ -21,7 +21,6 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
-    <?xml version="1.0" encoding="utf-8"?>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,13 +28,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
-            android:id="@+id/realm_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:rrvLayoutType="LinearLayout"
-            app:rrvSwipeToDelete="true"
-            app:rrvEmptyLayoutId="@layout/empty_view"
+
             />
     </FrameLayout>
     <android.support.design.widget.FloatingActionButton
@@ -44,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

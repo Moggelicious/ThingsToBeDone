@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:gravity="center_vertical|left"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingLeft="16dp"
     android:id="@+id/container_item_root"
     >
@@ -12,6 +12,19 @@
     <ImageView
         android:id="@+id/image_item_icon"
         android:layout_width="36dp"
-        android:layout_height="36dp" />
+        android:layout_height="36dp"
+        android:src="@android:drawable/ic_menu_edit"
+        android:tint="@color/colorPrimary"
+        />
+
+    <TextView
+        android:id="@+id/label_item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingLeft="8dp"
+        android:text="Enjoy the silence"
+
+        />
 
 </LinearLayout>

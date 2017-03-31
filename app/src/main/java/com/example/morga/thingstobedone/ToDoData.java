@@ -10,7 +10,7 @@ import java.util.List;
 public class ToDoData {
 
     private static final String[] titles = {"Nothingness cannot be defined",
-            "The softest thing cannot be snapped", "Be like water, my friend."};
+            "The softest thing cannot be snapped","Be like water, my friend."};
 
     private static final int[] icons = {android.R.drawable.ic_popup_reminder,
             android.R.drawable.ic_menu_delete};

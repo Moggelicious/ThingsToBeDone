@@ -21,7 +21,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoHolder> {
 
     public ToDoAdapter (List<ListItem> listdata, Context c){
         this.inflater = LayoutInflater.from(c);
-        this.listData = listData;
+        this.listData = listdata;
     }
 
 

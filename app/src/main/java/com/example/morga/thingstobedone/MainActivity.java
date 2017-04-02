@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     }
 
     @Override
-    public void inSecondaryIconClick(int p) {
+    public void onSecondaryIconClick(int p) {
         ListItem item = (ListItem) listData.get(p);
         //update data
         if (item.isFavourite()) {

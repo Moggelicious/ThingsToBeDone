@@ -35,7 +35,7 @@ public class ToDoData {
             "Alhazen",
             "Jim Rohn"
 };
-    private static final int icon = R.drawable.ic_inbox_black_24dp;
+    private static final int icon = R.drawable.ic_inbox_black_36dp;
 
     private static final int[] icons = {android.R.drawable.ic_popup_reminder,
             android.R.drawable.ic_menu_delete};

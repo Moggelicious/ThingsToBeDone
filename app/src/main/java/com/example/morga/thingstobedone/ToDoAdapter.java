@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,14 +20,25 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoHolder> {
     private List<ListItem> listData;
     private LayoutInflater inflater;
 
-    public ToDoAdapter (List<ListItem> listdata, Context c){
+    private ItemClickCallback itemClickCallback;
+
+    public interface ItemClickCallback {
+        void onItemClick(int p);
+        void inSecondaryIconClick(int p);
+    }
+
+    public void setItemClickCallback (final ItemClickCallback itemClickCallback){
+        this.itemClickCallback = itemClickCallback;
+    }
+
+    public ToDoAdapter(List<ListItem> listData, Context c) {
         this.inflater = LayoutInflater.from(c);
-        this.listData = listdata;
+        this.listData = listData;
     }
 
 
     @Override
-    public ToDoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ToDoAdapter.ToDoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.list_item, parent, false);
         return new ToDoHolder(view);
     }
@@ -35,8 +47,17 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoHolder> {
     public void onBindViewHolder(ToDoHolder holder, int position) {
         ListItem item = listData.get(position);
         holder.title.setText(item.getTitle());
-        holder.icon.setImageResource(item.getImageResId());
+        holder.subTitle.setText(item.getSubTitle());
+        if (item.isFavourite()) {
+            holder.secondaryIcon.setImageResource(R.drawable.ic_star_black_24dp);
+        } else {
+            holder.secondaryIcon.setImageResource(R.drawable.ic_star_border_black_24dp);
+        }
+    }
 
+    public void setListData(ArrayList<ListItem> excerciseList) {
+        this.listData.clear();
+        this.listData.addAll(excerciseList);
     }
 
     @Override
@@ -44,18 +65,33 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoHolder> {
         return listData.size();
     }
 
-    class ToDoHolder extends RecyclerView.ViewHolder {
+    class ToDoHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView title;
-        private ImageView icon;
-        private View container;
+         TextView title;
+         TextView subTitle;
+         ImageView thumbNail;
+         ImageView secondaryIcon;
+         View container;
 
         public ToDoHolder(View itemView) {
             super(itemView);
 
-            title = (TextView)itemView.findViewById(R.id.label_item_text);
-            icon = (ImageView)itemView.findViewById(R.id.image_item_icon);
-            container = itemView.findViewById(R.id.container_item_root);
+            title = (TextView) itemView.findViewById(R.id.lbl_item_text);
+            subTitle = (TextView) itemView.findViewById(R.id.lbl_item_sub_title);
+            thumbNail = (ImageView) itemView.findViewById(R.id.im_item_icon);
+            secondaryIcon = (ImageView) itemView.findViewById(R.id.im_item_icon_secondary);
+            secondaryIcon.setOnClickListener(this);
+            container = itemView.findViewById(R.id.cont_item_root);
+            container.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.cont_item_root) {
+                itemClickCallback.onItemClick(getAdapterPosition());
+            } else {
+                itemClickCallback.inSecondaryIconClick(getAdapterPosition());
+            }
         }
     }
 }

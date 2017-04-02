@@ -27,7 +27,7 @@ public class ToDoData {
                     " have charge of."
     };
 
-    private static final String[] subTitle = {"Bruce Lee",
+    private static final String[] subTitles = {"Bruce Lee",
             "Marcus Aurelius",
             "Meng Tzu",
             "Ajahn Chah",
@@ -49,6 +49,7 @@ public class ToDoData {
                 ListItem item = new ListItem();
                 item.setImageResId(icons[i]);
                 item.setTitle(titles[i]);
+                item.setSubTitle(subTitles[i]);
                 data.add(item);
             }
         }

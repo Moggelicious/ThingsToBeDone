@@ -2,6 +2,7 @@ package com.example.morga.thingstobedone;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Morga on 2017-03-20.
@@ -34,7 +35,7 @@ public class ToDoData {
             "Carl Sagan",
             "Alhazen",
             "Jim Rohn"
-};
+    };
     private static final int icon = R.drawable.ic_inbox_black_36dp;
 
     private static final int[] icons = {android.R.drawable.ic_popup_reminder,
@@ -56,4 +57,17 @@ public class ToDoData {
 
         return data;
     }
+
+    public static ListItem getRandomListItem() {
+        int random = new Random().nextInt(6);
+
+        ListItem item = new ListItem();
+
+        item.setTitle(titles[random]);
+        item.setSubTitle(subTitles[random]);
+
+        return item;
+
+    }
+
 }

@@ -9,11 +9,20 @@
     android:paddingTop="16dp"
     tools:context="com.example.morga.thingstobedone.DetailActivity">
      
+    <ImageView
+        android:id="@+id/im_detail_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_inbox_black_36dp"
+        android:transitionName="@string/transition_image" />
+     
     <TextView
         android:id="@+id/lbl_quote_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium" />
+        android:layout_below="@id/im_detail_image"
+        android:fontFamily="sans-serif-medium"
+        android:transitionName="@string/transition_quote" />
      
     <TextView
         android:id="@+id/lbl_quote_attribution"
@@ -21,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/lbl_quote_text"
         android:fontFamily="sans-serif-light"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        android:transitionName="@string/transition_attribution" />
      
 </RelativeLayout>

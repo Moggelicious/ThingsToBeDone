@@ -51,6 +51,7 @@ public class ToDoData {
                 item.setImageResId(icons[i]);
                 item.setTitle(titles[i]);
                 item.setSubTitle(subTitles[i]);
+                item.setImageResId(icon);
                 data.add(item);
             }
         }
@@ -65,7 +66,7 @@ public class ToDoData {
 
         item.setTitle(titles[random]);
         item.setSubTitle(subTitles[random]);
-
+        item.setImageResId(icon);
         return item;
 
     }

@@ -23,7 +23,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoHolder> {
     private ItemClickCallback itemClickCallback;
 
     public interface ItemClickCallback {
-        void onItemClick(int p);
+        void onItemClick(View v, int p);
         void onSecondaryIconClick(int p);
     }
 
@@ -88,7 +88,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoHolder> {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.cont_item_root) {
-                itemClickCallback.onItemClick(getAdapterPosition());
+                itemClickCallback.onItemClick(v, getAdapterPosition());
             } else {
                 itemClickCallback.onSecondaryIconClick(getAdapterPosition());
             }

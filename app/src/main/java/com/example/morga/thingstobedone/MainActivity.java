@@ -10,10 +10,11 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.transition.Fade;
 import android.view.View;
-import android.widget.Button;
+
 
 import java.util.ArrayList;
 
@@ -29,7 +30,8 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     private RecyclerView recyclerView;
     private ToDoAdapter adapter;
     private ArrayList listData;
-    FloatingActionButton fab;
+    public FloatingActionButton fab;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

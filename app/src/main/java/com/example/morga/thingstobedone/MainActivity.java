@@ -10,16 +10,13 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.transition.Fade;
 import android.view.View;
-
-
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback {
+public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback{
 
     public static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
     public static final String EXTRA_QUOTE = "EXTRA_QUOTE";

@@ -59,7 +59,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoHolder> {
         this.listData.clear();
         this.listData.addAll(excerciseList);
     }
-
+//bajs
     @Override
     public int getItemCount() {
         return listData.size();

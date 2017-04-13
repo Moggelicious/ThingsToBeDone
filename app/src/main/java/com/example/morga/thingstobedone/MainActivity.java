@@ -14,9 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.transition.Fade;
 import android.view.View;
-
-
+import android.widget.EditText;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback {
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
         listData = (ArrayList) ToDoData.getListData();
 
+
         recyclerView = (RecyclerView)findViewById(R.id.recycler_list);
         //LayoutManager: Grid, Staggered
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+
         fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -58,6 +61,21 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
                 addItemToList();
             }
         });
+
+        //fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
+        //fab.setOnClickListener(new View.OnClickListener(){
+        //  @Override
+        //public void onClick(View v) {
+        //  addItemToList();
+        // }
+        //});
+
+
+
+
+
+
+
     }
     private ItemTouchHelper.Callback createHelperCallback() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =

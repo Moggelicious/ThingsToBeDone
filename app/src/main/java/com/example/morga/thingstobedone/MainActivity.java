@@ -48,13 +48,17 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
-        fab.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                addItemToList();
-            }
-        });
+        //fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
+        //fab.setOnClickListener(new View.OnClickListener(){
+          //  @Override
+            //public void onClick(View v) {
+              //  addItemToList();
+           // }
+        //});
+
+
+
+
     }
     private ItemTouchHelper.Callback createHelperCallback() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =

@@ -1,6 +1,7 @@
 package com.example.morga.thingstobedone;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         databaseTodoItems = FirebaseDatabase.getInstance().getReference("todoItems");
 

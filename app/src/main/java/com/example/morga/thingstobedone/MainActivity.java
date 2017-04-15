@@ -11,26 +11,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.transition.Fade;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import java.util.List;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback{
+public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback {
 
+
+    public static final String TODO_ID = "Mogge";
+    public static final String TODO_TASK = "MoggeId";
     public static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
     public static final String EXTRA_QUOTE = "EXTRA_QUOTE";
     public static final String EXTRA_ATTR = "EXTRA_ATTR";
     public static final String EXTRA_IMAGE_RES_ID = "EXTRA_IMAGE_RES_ID";
 
-
     private RecyclerView recyclerView;
     private ToDoAdapter adapter;
     private ArrayList listData;
-    public FloatingActionButton fab;
+
+    EditText editTextTask;
+    EditText editTextDescription;
+    ListView listViewItems;
+
+    List<ToDoItem> todoItems;
+
+    FloatingActionButton fabAddItem;
+    DatabaseReference databaseTodoItems;
 
 
     @Override
@@ -38,6 +56,53 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+        databaseTodoItems = FirebaseDatabase.getInstance().getReference("todoItems");
+
+        editTextTask = (EditText) findViewById(R.id.input_task);
+        editTextDescription = (EditText) findViewById(R.id.input_description);
+        listViewItems = (ListView) findViewById(R.id.listViewItems);
+
+        fabAddItem = (FloatingActionButton) findViewById(R.id.btn_add_item);
+
+        todoItems = new ArrayList<>();
+
+        fabAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startActivity(new Intent(getApplicationContext(), ToDoItem.class));
+                setContentView(R.layout.todo_item);
+                //addItem();
+            }
+        });
+    }
+
+    private void addItem() {
+        String Task = editTextTask.getText().toString().trim();
+        String Description = editTextDescription.getText().toString().trim();
+
+
+        if (!TextUtils.isEmpty(Task)) {
+
+            String id = databaseTodoItems.push().getKey();
+            // creating todo object
+            ToDoItem toDoItem = new ToDoItem(id, Task, Description);
+            // saving the todo item
+            databaseTodoItems.child(id).setValue(toDoItem);
+            //setting editText to blank
+            editTextTask.setText("");
+            editTextDescription.setText("");
+            Toast.makeText(this, "Todo task added", Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(this, "Please enter a task", Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+
+
 
         listData = (ArrayList) ToDoData.getListData();
 

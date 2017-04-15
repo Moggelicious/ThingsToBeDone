@@ -4,8 +4,8 @@
     <string name="transition_image">image</string>
     <string name="transition_quote">quote</string>
     <string name="transition_attribution">attribution</string>
-    <string name="hint_task">task</string>
-    <string name="hint_description">description</string>
+    <string name="hint_task">New todo task</string>
+    <string name="hint_description">Description of task</string>
     <item name="visible" type="id"/>
     <item name="masked" type="id"/>
 

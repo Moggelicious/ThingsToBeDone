@@ -27,6 +27,7 @@
         android:layout_gravity="end|bottom"
         android:elevation="4dp"
         app:fabSize="normal"
+        android:onClick="itemInput"
         />
 
 

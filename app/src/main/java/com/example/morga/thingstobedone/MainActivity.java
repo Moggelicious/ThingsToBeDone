@@ -14,16 +14,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -48,52 +51,68 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
     List<ToDoItem> todoItems;
 
-    FloatingActionButton fabAddItem;
+
+    //FloatingActionButton fabAddItem;
     DatabaseReference databaseTodoItems;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //
+
         setContentView(R.layout.activity_main);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         databaseTodoItems = FirebaseDatabase.getInstance().getReference("todoItems");
 
-        editTextTask = (EditText) findViewById(R.id.input_task);
-        editTextDescription = (EditText) findViewById(R.id.input_description);
+        editTextTask = (EditText) findViewById(R.id.editTextTask);
+        editTextDescription = (EditText) findViewById(R.id.editTextDescription);
         listViewItems = (ListView) findViewById(R.id.listViewItems);
 
-        fabAddItem = (FloatingActionButton) findViewById(R.id.btn_add_item);
 
         todoItems = new ArrayList<>();
-
+        FloatingActionButton fabAddItem = (FloatingActionButton) findViewById(R.id.btn_add_item);
         fabAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(getApplicationContext(), ToDoItem.class));
-                setContentView(R.layout.todo_item);
-                //addItem();
+                setContentView(R.layout.item_input);
+
+                Toast.makeText(MainActivity.this, "Hello FAB!", Toast.LENGTH_SHORT).show();
+
             }
         });
+    }
+
+
+
+    public void sendTask (View view) {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+    }
+
+    public void itemInput(View view) {
+        startActivity(new Intent(getApplicationContext(), ItemInput.class));
     }
 
     private void addItem() {
         String Task = editTextTask.getText().toString().trim();
         String Description = editTextDescription.getText().toString().trim();
 
-
         if (!TextUtils.isEmpty(Task)) {
 
             String id = databaseTodoItems.push().getKey();
             // creating todo object
-            ToDoItem toDoItem = new ToDoItem(id, Task, Description);
+
+            ToDoItem todoItem = new ToDoItem(id, Task, Description);
             // saving the todo item
-            databaseTodoItems.child(id).setValue(toDoItem);
+
+            databaseTodoItems.child(id).setValue(todoItem);
             //setting editText to blank
+
             editTextTask.setText("");
             editTextDescription.setText("");
+
             Toast.makeText(this, "Todo task added", Toast.LENGTH_LONG).show();
 
         } else {
@@ -101,14 +120,9 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         }
 
 
-
-
-
-
-
         listData = (ArrayList) ToDoData.getListData();
 
-        recyclerView = (RecyclerView)findViewById(R.id.recycler_list);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         //LayoutManager: Grid, Staggered
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -121,16 +135,15 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
         //fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
         //fab.setOnClickListener(new View.OnClickListener(){
-          //  @Override
-            //public void onClick(View v) {
-              //  addItemToList();
-           // }
+        //  @Override
+        //public void onClick(View v) {
+        //  addItemToList();
+        // }
         //});
 
 
-
-
     }
+
     private ItemTouchHelper.Callback createHelperCallback() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
@@ -174,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
 
     @Override
-    public void onItemClick(View v,int p) {
+    public void onItemClick(View v, int p) {
         ListItem item = (ListItem) listData.get(p);
 
         Intent i = new Intent(this, DetailActivity.class);
@@ -211,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         //update data
         if (item.isFavourite()) {
             item.setFavourite(false);
-        }else {
+        } else {
             item.setFavourite(true);
         }
         //pass new data to adapter and update

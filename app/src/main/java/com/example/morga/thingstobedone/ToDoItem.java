@@ -6,22 +6,22 @@ import com.google.firebase.database.IgnoreExtraProperties;
 /**
  * Created by Morga on 2017-04-13.
  */
-
+@IgnoreExtraProperties
 public class ToDoItem extends AppCompatActivity {
 
     private String itemId;
-    private String task;
-    private String description;
+    private String itemTask;
+    private String itemDescription;
 
     public ToDoItem() {
 
 
     }
 
-    public ToDoItem(String itemId, String task, String description) {
+    public ToDoItem(String itemId, String itemTask, String itemDescription) {
         this.itemId = itemId;
-        this.task = task;
-        this.description = description;
+        this.itemTask = itemTask;
+        this.itemDescription = itemDescription;
     }
 
     public String getItemId() {
@@ -29,10 +29,10 @@ public class ToDoItem extends AppCompatActivity {
     }
 
     public String getTask() {
-        return task;
+        return itemTask;
     }
 
     public String getDescription() {
-        return description;
+        return itemDescription;
     }
 }

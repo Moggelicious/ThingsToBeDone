@@ -1,5 +1,6 @@
 package com.example.morga.thingstobedone;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
@@ -8,24 +9,21 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.transition.Fade;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -45,11 +43,12 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     private ToDoAdapter adapter;
     private ArrayList listData;
 
-    EditText editTextTask;
-    EditText editTextDescription;
-    ListView listViewItems;
+    private EditText editText;
+    private EditText editSubTitle;
+    private ListView listViewItems;
 
-    List<ToDoItem> todoItems;
+    private FloatingActionButton fabNewItem;
+    List<Item> todoItems;
 
 
     //FloatingActionButton fabAddItem;
@@ -66,58 +65,10 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
         databaseTodoItems = FirebaseDatabase.getInstance().getReference("todoItems");
 
-        editTextTask = (EditText) findViewById(R.id.editTextTask);
-        editTextDescription = (EditText) findViewById(R.id.editTextDescription);
-        listViewItems = (ListView) findViewById(R.id.listViewItems);
-
-
+        editText = (EditText) findViewById(R.id.item_text);
+        editSubTitle = (EditText) findViewById(R.id.item_sub_title);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         todoItems = new ArrayList<>();
-        FloatingActionButton fabAddItem = (FloatingActionButton) findViewById(R.id.btn_add_item);
-        fabAddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setContentView(R.layout.item_input);
-
-                Toast.makeText(MainActivity.this, "Hello FAB!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
-
-
-
-    public void sendTask (View view) {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
-    }
-
-    public void itemInput(View view) {
-        startActivity(new Intent(getApplicationContext(), ItemInput.class));
-    }
-
-    private void addItem() {
-        String Task = editTextTask.getText().toString().trim();
-        String Description = editTextDescription.getText().toString().trim();
-
-        if (!TextUtils.isEmpty(Task)) {
-
-            String id = databaseTodoItems.push().getKey();
-            // creating todo object
-
-            ToDoItem todoItem = new ToDoItem(id, Task, Description);
-            // saving the todo item
-
-            databaseTodoItems.child(id).setValue(todoItem);
-            //setting editText to blank
-
-            editTextTask.setText("");
-            editTextDescription.setText("");
-
-            Toast.makeText(this, "Todo task added", Toast.LENGTH_LONG).show();
-
-        } else {
-            Toast.makeText(this, "Please enter a task", Toast.LENGTH_LONG).show();
-        }
 
 
         listData = (ArrayList) ToDoData.getListData();
@@ -133,6 +84,119 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+    }
+
+    public void newItem(View view) {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.new_item, null);
+        final EditText item_text = (EditText) alertLayout.findViewById(R.id.item_text);
+        final EditText item_sub_title = (EditText) alertLayout.findViewById(R.id.item_sub_title);
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Thing to do");
+
+        alert.setView(alertLayout);
+
+        alert.setCancelable(false);
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alert.setPositiveButton("Added", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String text = editText.getText().toString().trim();
+                String subTitle = editSubTitle.getText().toString().trim();
+
+
+                if (!TextUtils.isEmpty(text)) {
+
+                    String id = databaseTodoItems.push().getKey();
+                    // creating todo object
+
+                    Item item = new Item(id, text, subTitle);
+                    // saving the todo item
+
+                    databaseTodoItems.child(id).setValue(item);
+                    //setting editText to blank
+
+                    item_text.setText("");
+                    item_sub_title.setText("");
+
+                    Toast.makeText(getBaseContext(), "Todo task added", Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(getBaseContext(), "Please enter text", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+
+    }
+
+
+
+
+
+/*    public void addItem (View view) {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        addInput();
+
+
+    }
+
+    public void newItem(View view) {
+        startActivity(new Intent(getApplicationContext(), Item.class));
+
+    }*/
+
+/*    private void addInput() {
+
+
+        String text = editText.getText().toString().trim();
+        String subTitle = editSubTitle.getText().toString().trim();
+
+        if (!TextUtils.isEmpty(text)) {
+
+            String id = databaseTodoItems.push().getKey();
+            // creating todo object
+
+            Item item = new Item(id, text, subTitle);
+            // saving the todo item
+
+            databaseTodoItems.child(id).setValue(item);
+            //setting editText to blank
+
+            //editTextTask.setText("");
+            //editTextDescription.setText("");
+
+            Toast.makeText(this, "Todo task added", Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(this, "Please enter text", Toast.LENGTH_LONG).show();
+        }
+
+
+        listData = (ArrayList) ToDoData.getListData();
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
+        //LayoutManager: Grid, Staggered
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new ToDoAdapter(listData, this);
+        recyclerView.setAdapter(adapter);
+        adapter.setItemClickCallback(this);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
+        itemTouchHelper.attachToRecyclerView(recyclerView);*/
+
         //fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
         //fab.setOnClickListener(new View.OnClickListener(){
         //  @Override
@@ -142,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         //});
 
 
-    }
+
 
     private ItemTouchHelper.Callback createHelperCallback() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =

@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity"></activity>
-        <activity android:name=".ToDoItem"></activity>
+        <activity android:name=".Item"></activity>
         <activity android:name=".ItemInput"></activity>
     </application>
 

@@ -1,8 +1,9 @@
+/*
 package com.example.morga.thingstobedone;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,9 +19,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * Created by Morga on 2017-04-16.
- */
+ *//*
+
 
 public class ItemInput extends AppCompatActivity {
 
@@ -31,7 +34,7 @@ public class ItemInput extends AppCompatActivity {
     EditText editTextDescription;
     ListView listViewItems;
 
-    List<ToDoItem> todoItems;
+    List<Item> todoItems;
 
     DatabaseReference databaseTodoItems;
 
@@ -43,8 +46,8 @@ public class ItemInput extends AppCompatActivity {
         Button buttonSendItem;
         databaseTodoItems = FirebaseDatabase.getInstance().getReference("todoItems");
 
-        editTextTask = (EditText) findViewById(R.id.editTextTask);
-        editTextDescription = (EditText) findViewById(R.id.editTextDescription);
+        editTextTask = (EditText) findViewById(R.id.item_text);
+        editTextDescription = (EditText) findViewById(R.id.item_sub_title);
         listViewItems = (ListView) findViewById(R.id.listViewItems);
 
 
@@ -52,7 +55,7 @@ public class ItemInput extends AppCompatActivity {
 
         todoItems = new ArrayList<>();
 
-        buttonSendItem = (Button) findViewById(R.id.btn_send_task);
+        buttonSendItem = (Button) findViewById(R.id.btn_add_item);
 
         buttonSendItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,20 +70,23 @@ public class ItemInput extends AppCompatActivity {
 
     }
 
-    public void sendTask (View view) {
+    public void addItem (View view) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+
     }
 
-    private void addItem() {
-        String Task = editTextTask.getText().toString().trim();
-        String Description = editTextDescription.getText().toString().trim();
+    public void newItem(View view) {
+        startActivity(new Intent(getApplicationContext(), ItemInput.class));
+
+    }
 
         Log.d("DEBUG_RANDOM", "RANDOM number is:2");
         if (!TextUtils.isEmpty(Task)) {
 
             String id = databaseTodoItems.push().getKey();
             // creating todo object
-            ToDoItem todoItem = new ToDoItem(id, Task, Description);
+            Item todoItem = new Item(id, Task, Description);
             // saving the todo item
             databaseTodoItems.child(id).setValue(todoItem);
             //setting editText to blank
@@ -96,3 +102,4 @@ public class ItemInput extends AppCompatActivity {
 
 
 
+*/

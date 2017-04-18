@@ -17,10 +17,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Theme.App.Base" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorControlNormal">#d32f2f</item>
-        <item name="colorControlActivated">#ff5722</item>
-        <item name="colorControlHighlight">#f44336</item>
+    <style name="counterText">
+        <item name="android:textColor">#aa5353cc</item>
     </style>
 
-</resources>
+    <style name="counterOverride">
+        <item name="android:textColor">#ff0000</item>
+    </style>
+

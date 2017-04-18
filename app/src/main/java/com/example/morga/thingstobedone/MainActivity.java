@@ -1,48 +1,79 @@
 package com.example.morga.thingstobedone;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.transition.Fade;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.firebase.client.Firebase;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.List;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback {
+
+
 
     public static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
     public static final String EXTRA_QUOTE = "EXTRA_QUOTE";
     public static final String EXTRA_ATTR = "EXTRA_ATTR";
     public static final String EXTRA_IMAGE_RES_ID = "EXTRA_IMAGE_RES_ID";
 
-
     private RecyclerView recyclerView;
     private ToDoAdapter adapter;
     private ArrayList listData;
-    public FloatingActionButton fab;
+
+    private EditText itemText;
+    private EditText itemSubTitle;
+    private ListView listViewItems;
+
+    private FloatingActionButton fabNewItem;
+    List<Item> todoItems;
+
+    private DatabaseReference mDatabase;
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Firebase.setAndroidContext(this);
+
+        itemText = (EditText) findViewById(R.id.item_text);
+        itemSubTitle = (EditText) findViewById(R.id.item_sub_title);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         listData = (ArrayList) ToDoData.getListData();
 
+        //todoItems = new ArrayList<>();
 
-        recyclerView = (RecyclerView)findViewById(R.id.recycler_list);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         //LayoutManager: Grid, Staggered
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -53,30 +84,60 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+    }
 
-        fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
-        fab.setOnClickListener(new View.OnClickListener(){
+    public void newItem(View view) {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.new_item, null);
+        final EditText itemText = (EditText) alertLayout.findViewById(R.id.item_text);
+        final EditText itemSubTitle = (EditText) alertLayout.findViewById(R.id.item_sub_title);
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Thing to be done");
+
+        alert.setView(alertLayout);
+        alert.setCancelable(false);
+
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                addItemToList();
+            public void onClick(DialogInterface dialog, int which) {
+
+                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
             }
         });
 
-        //fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
-        //fab.setOnClickListener(new View.OnClickListener(){
-        //  @Override
-        //public void onClick(View v) {
-        //  addItemToList();
-        // }
-        //});
+        alert.setPositiveButton("Added", new DialogInterface.OnClickListener() {
 
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+                Firebase ref = new Firebase(Config.FIREBASE_URL);
 
+                String text = itemText.getText().toString().trim();
+                String subTitle = itemSubTitle.getText().toString().trim();
 
+                Item item = new Item();
 
+                item.setText(text);
+                item.setSubText(subTitle);
 
+                Toast.makeText(getBaseContext(), "Username: " + text + " Password: " + subTitle, Toast.LENGTH_SHORT).show();
 
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Items");
+                String itemId = mDatabase.push().getKey();
+
+                mDatabase.child(itemId).setValue(item);
+                //ref.child("Item").setValue(item);
+
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
     }
+
+
+
     private ItemTouchHelper.Callback createHelperCallback() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
@@ -99,11 +160,6 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         return simpleItemTouchCallback;
     }
 
-    private void addItemToList() {
-        ListItem item = ToDoData.getRandomListItem();
-        listData.add(item);
-        adapter.notifyItemInserted(listData.indexOf(item));
-    }
 
     private void moveItem(int oldPos, int newPos) {
 
@@ -120,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
 
     @Override
-    public void onItemClick(View v,int p) {
+    public void onItemClick(View v, int p) {
         ListItem item = (ListItem) listData.get(p);
 
         Intent i = new Intent(this, DetailActivity.class);
@@ -157,10 +213,11 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         //update data
         if (item.isFavourite()) {
             item.setFavourite(false);
-        }else {
+        } else {
             item.setFavourite(true);
         }
         //pass new data to adapter and update
+        //adapter.setListData(listData);
         adapter.notifyDataSetChanged();
 
     }

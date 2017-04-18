@@ -11,6 +11,10 @@ public class ListItem {
     private int imageResId;
     private boolean favourite=false;
 
+    public ListItem() {
+
+    }
+
     public String getSubTitle() {
 
         return subTitle;

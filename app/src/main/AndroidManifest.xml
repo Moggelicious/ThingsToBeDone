@@ -8,12 +8,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait">
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="ThingsToBeDone"
-            android:theme="@style/AppTheme.Base">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,8 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity"></activity>
-        <activity android:name=".Item"></activity>
-        <activity android:name=".ItemInput"></activity>
+        <uses-permission android:name="android.permission.INTERNET" />
+
     </application>
 
 </manifest>

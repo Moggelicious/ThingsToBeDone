@@ -55,9 +55,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoHolder> {
         }
     }
 
-    public void setListData(ArrayList<ListItem> excerciseList) {
+    public void setListData(ArrayList<ListItem> exerciseList) {
         this.listData.clear();
-        this.listData.addAll(excerciseList);
+        this.listData.addAll(exerciseList);
     }
 //bajs
     @Override

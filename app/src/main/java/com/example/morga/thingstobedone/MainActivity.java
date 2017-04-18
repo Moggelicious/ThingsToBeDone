@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 
@@ -32,8 +33,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback {
 
 
-    public static final String TODO_ID = "Mogge";
-    public static final String TODO_TASK = "MoggeId";
+
     public static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
     public static final String EXTRA_QUOTE = "EXTRA_QUOTE";
     public static final String EXTRA_ATTR = "EXTRA_ATTR";
@@ -43,35 +43,35 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     private ToDoAdapter adapter;
     private ArrayList listData;
 
-    private EditText editText;
-    private EditText editSubTitle;
+    private EditText itemText;
+    private EditText itemSubTitle;
     private ListView listViewItems;
 
     private FloatingActionButton fabNewItem;
     List<Item> todoItems;
 
+    private DatabaseReference mDatabase;
 
-    //FloatingActionButton fabAddItem;
-    DatabaseReference databaseTodoItems;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //
-
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        databaseTodoItems = FirebaseDatabase.getInstance().getReference("todoItems");
+        Firebase.setAndroidContext(this);
 
-        editText = (EditText) findViewById(R.id.item_text);
-        editSubTitle = (EditText) findViewById(R.id.item_sub_title);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
-        todoItems = new ArrayList<>();
+        itemText = (EditText) findViewById(R.id.item_text);
+        itemSubTitle = (EditText) findViewById(R.id.item_sub_title);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         listData = (ArrayList) ToDoData.getListData();
+
+        //todoItems = new ArrayList<>();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         //LayoutManager: Grid, Staggered
@@ -89,17 +89,17 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     public void newItem(View view) {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.new_item, null);
-        final EditText item_text = (EditText) alertLayout.findViewById(R.id.item_text);
-        final EditText item_sub_title = (EditText) alertLayout.findViewById(R.id.item_sub_title);
+        final EditText itemText = (EditText) alertLayout.findViewById(R.id.item_text);
+        final EditText itemSubTitle = (EditText) alertLayout.findViewById(R.id.item_sub_title);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Thing to do");
+        alert.setTitle("Thing to be done");
 
         alert.setView(alertLayout);
-
         alert.setCancelable(false);
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -111,100 +111,30 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String text = editText.getText().toString().trim();
-                String subTitle = editSubTitle.getText().toString().trim();
 
+                Firebase ref = new Firebase(Config.FIREBASE_URL);
 
-                if (!TextUtils.isEmpty(text)) {
+                String text = itemText.getText().toString().trim();
+                String subTitle = itemSubTitle.getText().toString().trim();
 
-                    String id = databaseTodoItems.push().getKey();
-                    // creating todo object
+                Item item = new Item();
 
-                    Item item = new Item(id, text, subTitle);
-                    // saving the todo item
+                item.setText(text);
+                item.setSubText(subTitle);
 
-                    databaseTodoItems.child(id).setValue(item);
-                    //setting editText to blank
+                Toast.makeText(getBaseContext(), "Username: " + text + " Password: " + subTitle, Toast.LENGTH_SHORT).show();
 
-                    item_text.setText("");
-                    item_sub_title.setText("");
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Items");
+                String itemId = mDatabase.push().getKey();
 
-                    Toast.makeText(getBaseContext(), "Todo task added", Toast.LENGTH_LONG).show();
+                mDatabase.child(itemId).setValue(item);
+                //ref.child("Item").setValue(item);
 
-                } else {
-                    Toast.makeText(getBaseContext(), "Please enter text", Toast.LENGTH_LONG).show();
-                }
             }
         });
         AlertDialog dialog = alert.create();
         dialog.show();
-
     }
-
-
-
-
-
-/*    public void addItem (View view) {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        addInput();
-
-
-    }
-
-    public void newItem(View view) {
-        startActivity(new Intent(getApplicationContext(), Item.class));
-
-    }*/
-
-/*    private void addInput() {
-
-
-        String text = editText.getText().toString().trim();
-        String subTitle = editSubTitle.getText().toString().trim();
-
-        if (!TextUtils.isEmpty(text)) {
-
-            String id = databaseTodoItems.push().getKey();
-            // creating todo object
-
-            Item item = new Item(id, text, subTitle);
-            // saving the todo item
-
-            databaseTodoItems.child(id).setValue(item);
-            //setting editText to blank
-
-            //editTextTask.setText("");
-            //editTextDescription.setText("");
-
-            Toast.makeText(this, "Todo task added", Toast.LENGTH_LONG).show();
-
-        } else {
-            Toast.makeText(this, "Please enter text", Toast.LENGTH_LONG).show();
-        }
-
-
-        listData = (ArrayList) ToDoData.getListData();
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
-        //LayoutManager: Grid, Staggered
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new ToDoAdapter(listData, this);
-        recyclerView.setAdapter(adapter);
-        adapter.setItemClickCallback(this);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
-        itemTouchHelper.attachToRecyclerView(recyclerView);*/
-
-        //fab = (FloatingActionButton)findViewById(R.id.btn_add_item);
-        //fab.setOnClickListener(new View.OnClickListener(){
-        //  @Override
-        //public void onClick(View v) {
-        //  addItemToList();
-        // }
-        //});
-
 
 
 
@@ -230,11 +160,6 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         return simpleItemTouchCallback;
     }
 
-    private void addItemToList() {
-        ListItem item = ToDoData.getRandomListItem();
-        listData.add(item);
-        adapter.notifyItemInserted(listData.indexOf(item));
-    }
 
     private void moveItem(int oldPos, int newPos) {
 
@@ -292,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
             item.setFavourite(true);
         }
         //pass new data to adapter and update
+        //adapter.setListData(listData);
         adapter.notifyDataSetChanged();
 
     }

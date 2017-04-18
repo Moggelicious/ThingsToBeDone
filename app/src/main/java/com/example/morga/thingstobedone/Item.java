@@ -6,32 +6,30 @@ import com.google.firebase.database.IgnoreExtraProperties;
 /**
  * Created by Morga on 2017-04-13.
  */
-@IgnoreExtraProperties
-public class Item extends AppCompatActivity {
 
-    private String itemId;
-    private String itemText;
-    private String itemSubTitle;
+public class Item {
+
+    private String text;
+    private String subText;
 
     public Item() {
+        /*Blank default constructor essential for Firebase*/
+    }
+    //Getters and setters
 
+    public String getText() {
+        return text;
     }
 
-    public Item(String itemId, String itemText, String itemSubTitle) {
-        this.itemId = itemId;
-        this.itemText = itemText;
-        this.itemSubTitle = itemSubTitle;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getSubText() {
+        return subText;
     }
 
-    public String getItemText() {
-        return itemText;
-    }
-
-    public String getItemSubTitle() {
-        return itemSubTitle;
+    public void setSubText(String subText) {
+        this.subText = subText;
     }
 }

@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,16 +26,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback {
-
 
 
     public static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
@@ -54,9 +57,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     List<Item> todoItems;
 
     private DatabaseReference mDatabase;
-
-
-
+    //Firebase ref = new Firebase(Config.FIREBASE_URL);
 
 
     @Override
@@ -88,6 +89,19 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String value = dataSnapshot.getValue().toString();
+                Log.d("TAG", "Value"+ value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
 
     }
 
@@ -142,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
 
     }
+
+
 /*    @Override
     protected void onPause() {
 

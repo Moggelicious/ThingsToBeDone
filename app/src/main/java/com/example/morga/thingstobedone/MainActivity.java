@@ -146,7 +146,8 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
                 item.setText(text);
                 item.setSubText(subTitle);
 
-                Toast.makeText(getBaseContext(), "Username: " + text + " Password: " + subTitle, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Added new todo", Toast.LENGTH_SHORT).show();
+                Log.d("TAG", text + " " + subTitle);
 
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Items");
                 String itemId = mDatabase.push().getKey();

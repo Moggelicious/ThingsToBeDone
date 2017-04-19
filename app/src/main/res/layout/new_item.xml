@@ -19,7 +19,6 @@
 
 
         <EditText
-
             android:id="@+id/item_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,6 +27,7 @@
             android:maxLines="1"
             android:lines="1"
             android:inputType="text"/>
+
             </LinearLayout>
 
         <LinearLayout

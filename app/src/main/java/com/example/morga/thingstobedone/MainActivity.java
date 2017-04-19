@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Firebase.setAndroidContext(this);
 
         itemText = (EditText) findViewById(R.id.item_text);
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
 
     }
-    @Override
+/*    @Override
     protected void onPause() {
 
         // hide the keyboard in order to avoid getTextBeforeCursor on inactive InputConnection
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         super.onPause();
 
 
-    }
+    }*/
 
 
     private ItemTouchHelper.Callback createHelperCallback() {

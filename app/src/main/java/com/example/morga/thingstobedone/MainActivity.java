@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         final EditText itemSubTitle = (EditText) alertLayout.findViewById(R.id.item_sub_title);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Thing to be done");
+        alert.setTitle("New Todo:");
 
         alert.setView(alertLayout);
         alert.setCancelable(false);
@@ -127,11 +127,11 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Cancel", Toast.LENGTH_SHORT).show();
             }
         });
 
-        alert.setPositiveButton("Added", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {

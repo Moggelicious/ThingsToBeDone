@@ -95,6 +95,11 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String value = dataSnapshot.getValue().toString();
                 Log.d("TAG", "Value"+ value);
+                String itemId = mDatabase.push().getKey();
+                //mDatabase.child(itemId).setValue(new Item());
+
+
+                Log.d("TAG", itemId);
             }
 
             @Override

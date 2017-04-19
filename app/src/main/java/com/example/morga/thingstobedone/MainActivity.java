@@ -1,5 +1,6 @@
 package com.example.morga.thingstobedone;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -18,11 +19,13 @@ import android.text.TextUtils;
 import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 
@@ -134,8 +137,22 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         });
         AlertDialog dialog = alert.create();
         dialog.show();
-    }
 
+
+    }
+    @Override
+    protected void onPause() {
+
+        // hide the keyboard in order to avoid getTextBeforeCursor on inactive InputConnection
+        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputMethodManager.hideSoftInputFromWindow(itemText.getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(itemSubTitle.getWindowToken(), 0);
+
+        super.onPause();
+
+
+    }
 
 
     private ItemTouchHelper.Callback createHelperCallback() {

@@ -1,5 +1,6 @@
 package com.example.morga.thingstobedone;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -124,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         alert.setTitle("New Todo:");
 
         alert.setView(alertLayout);
-        alert.setCancelable(false);
+
+        //alert.setCancelable(false);
 
 
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -163,12 +165,21 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         });
         AlertDialog dialog = alert.create();
         dialog.show();
+        hideSoftKeyboard(this);
 
 
     }
 
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
-    @Override
+
+/*    @Override
     protected void onPause() {
 
         // hide the keyboard in order to avoid getTextBeforeCursor on inactive InputConnection
@@ -180,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         super.onPause();
 
 
-    }
+    }*/
 
 
     private ItemTouchHelper.Callback createHelperCallback() {

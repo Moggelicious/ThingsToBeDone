@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         final EditText itemSubTitle = (EditText) alertLayout.findViewById(R.id.item_sub_title);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle(R.string.new_todo);
+        //alert.setTitle(R.string.new_todo);
 
         alert.setView(alertLayout);
 
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
 
                 Snackbar snackbar = Snackbar
-                        .make(coordinatorLayout, "Todo added", Snackbar.LENGTH_LONG);
+                        .make(coordinatorLayout, "New todo added", Snackbar.LENGTH_LONG);
 
                 snackbar.show();
                 //Toast.makeText(getBaseContext(), "Added newtodo", Toast.LENGTH_SHORT).show();

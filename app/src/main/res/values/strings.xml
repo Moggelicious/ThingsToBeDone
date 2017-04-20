@@ -6,6 +6,7 @@
     <string name="transition_attribution">attribution</string>
     <string name="hint_task">Thing to be done</string>
     <string name="hint_description">Description and fun</string>
+    <string name="new_todo">New todo</string>
     <item name="visible" type="id"/>
     <item name="masked" type="id"/>
 

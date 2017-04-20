@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.solver.widgets.Snapshot;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -61,11 +64,14 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     //Firebase ref = new Firebase(Config.FIREBASE_URL);
 
 
+    private CoordinatorLayout coordinatorLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
 
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -79,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
         listData = (ArrayList) ToDoData.getListData();
 
-        //todoItems = new ArrayList<>();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         //LayoutManager: Grid, Staggered
@@ -96,24 +101,24 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                
 
-               String value = dataSnapshot.getValue().toString();
+                String value = dataSnapshot.getValue().toString();
                 Log.d("TAG", "Value" + value);
                 String itemId = mDatabase.push().getKey();
                 //mDatabase.child(itemId).setValue(new Item());*/
 
 
-                //Log.d("TAG", itemId);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
             }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError){
+                    Log.d("TAG","The read failed: " + databaseError.getCode());
+                }
+            });
 
-    }
+
+        }
+
 
     public void newItem(View view) {
         LayoutInflater inflater = getLayoutInflater();
@@ -122,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         final EditText itemSubTitle = (EditText) alertLayout.findViewById(R.id.item_sub_title);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("New Todo:");
+        alert.setTitle(R.string.new_todo);
 
         alert.setView(alertLayout);
 
@@ -133,7 +138,13 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), "Cancel", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Cancelled", Snackbar.LENGTH_LONG);
+
+
+                snackbar.show();
+
+                //Toast.makeText(getBaseContext(), "Cancel", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -147,16 +158,25 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
                 String text = itemText.getText().toString().trim();
                 String subTitle = itemSubTitle.getText().toString().trim();
 
-                Item item = new Item();
+                ListItem item = new ListItem();
 
-                item.setText(text);
-                item.setSubText(subTitle);
+                item.setTitle(text);
+                item.setSubTitle(subTitle);
 
-                Toast.makeText(getBaseContext(), "Added new todo", Toast.LENGTH_SHORT).show();
+
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Todo added", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+                //Toast.makeText(getBaseContext(), "Added newtodo", Toast.LENGTH_SHORT).show();
+
+
                 Log.d("TAG", text + " " + subTitle);
 
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Items");
                 String itemId = mDatabase.push().getKey();
+
+
 
                 mDatabase.child(itemId).setValue(item);
                 //ref.child("Item").setValue(item);

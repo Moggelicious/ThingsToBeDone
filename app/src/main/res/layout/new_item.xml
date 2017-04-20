@@ -49,7 +49,7 @@
                 android:layout_weight=".7"
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
-                android:maxLines="7"
+                android:maxLines="5"
                 />
 
 

@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Firebase.setAndroidContext(this);
+        Firebase ref = new Firebase(Config.FIREBASE_URL);
 
         itemText = (EditText) findViewById(R.id.item_text);
         itemSubTitle = (EditText) findViewById(R.id.item_sub_title);
@@ -93,13 +94,16 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue().toString();
-                Log.d("TAG", "Value"+ value);
+
+                
+
+               String value = dataSnapshot.getValue().toString();
+                Log.d("TAG", "Value" + value);
                 String itemId = mDatabase.push().getKey();
-                //mDatabase.child(itemId).setValue(new Item());
+                //mDatabase.child(itemId).setValue(new Item());*/
 
 
-                Log.d("TAG", itemId);
+                //Log.d("TAG", itemId);
             }
 
             @Override
@@ -164,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     }
 
 
-/*    @Override
+    @Override
     protected void onPause() {
 
         // hide the keyboard in order to avoid getTextBeforeCursor on inactive InputConnection
@@ -176,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         super.onPause();
 
 
-    }*/
+    }
 
 
     private ItemTouchHelper.Callback createHelperCallback() {

@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.solver.widgets.Snapshot;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +25,7 @@ import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     //Firebase ref = new Firebase(Config.FIREBASE_URL);
 
 
+
+
     private CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -72,6 +76,15 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
+         if (Build.VERSION.SDK_INT < 16) {
+             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+         }
+
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Things to be done");
+
 
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);

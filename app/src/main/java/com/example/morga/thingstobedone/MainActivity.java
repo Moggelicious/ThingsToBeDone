@@ -1,12 +1,17 @@
 package com.example.morga.thingstobedone;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.solver.widgets.Snapshot;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -17,24 +22,28 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemClickCallback {
-
 
 
     public static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
@@ -54,20 +63,33 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
     List<Item> todoItems;
 
     private DatabaseReference mDatabase;
+    //Firebase ref = new Firebase(Config.FIREBASE_URL);
 
 
 
 
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
+         if (Build.VERSION.SDK_INT < 16) {
+             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+         }
+
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Things to be done");
+
 
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Firebase.setAndroidContext(this);
+        Firebase ref = new Firebase(Config.FIREBASE_URL);
 
         itemText = (EditText) findViewById(R.id.item_text);
         itemSubTitle = (EditText) findViewById(R.id.item_sub_title);
@@ -76,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
         listData = (ArrayList) ToDoData.getListData();
 
-        //todoItems = new ArrayList<>();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         //LayoutManager: Grid, Staggered
@@ -89,7 +110,28 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-    }
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                String value = dataSnapshot.getValue().toString();
+                Log.d("TAG", "Value" + value);
+                String itemId = mDatabase.push().getKey();
+                //mDatabase.child(itemId).setValue(new Item());*/
+
+
+
+            }
+                @Override
+                public void onCancelled(DatabaseError databaseError){
+                    Log.d("TAG","The read failed: " + databaseError.getCode());
+                }
+            });
+
+
+        }
+
 
     public void newItem(View view) {
         LayoutInflater inflater = getLayoutInflater();
@@ -98,21 +140,28 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         final EditText itemSubTitle = (EditText) alertLayout.findViewById(R.id.item_sub_title);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Thing to be done");
+        //alert.setTitle(R.string.new_todo);
 
         alert.setView(alertLayout);
-        alert.setCancelable(false);
+
+        //alert.setCancelable(false);
 
 
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Cancelled", Snackbar.LENGTH_LONG);
+
+
+                snackbar.show();
+
+                //Toast.makeText(getBaseContext(), "Cancel", Toast.LENGTH_SHORT).show();
             }
         });
 
-        alert.setPositiveButton("Added", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -122,15 +171,25 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
                 String text = itemText.getText().toString().trim();
                 String subTitle = itemSubTitle.getText().toString().trim();
 
-                Item item = new Item();
+                ListItem item = new ListItem();
 
-                item.setText(text);
-                item.setSubText(subTitle);
+                item.setTitle(text);
+                item.setSubTitle(subTitle);
 
-                Toast.makeText(getBaseContext(), "Username: " + text + " Password: " + subTitle, Toast.LENGTH_SHORT).show();
+
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "New thing to be done added", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+                //Toast.makeText(getBaseContext(), "Added newtodo", Toast.LENGTH_SHORT).show();
+
+
+                Log.d("TAG", text + " " + subTitle);
 
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Items");
                 String itemId = mDatabase.push().getKey();
+
+
 
                 mDatabase.child(itemId).setValue(item);
                 //ref.child("Item").setValue(item);
@@ -139,9 +198,20 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
         });
         AlertDialog dialog = alert.create();
         dialog.show();
+        hideSoftKeyboard(this);
 
 
     }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+
 /*    @Override
     protected void onPause() {
 

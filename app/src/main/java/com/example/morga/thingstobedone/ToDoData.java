@@ -1,5 +1,14 @@
 package com.example.morga.thingstobedone;
 
+import android.util.Log;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,6 +18,8 @@ import java.util.Random;
  */
 
 public class ToDoData {
+
+
 
     private static final String[] titles = {"Nothingness cannot be defined",
             "Time is like a river made up of the events which happen, and a violent stream; " +
@@ -43,9 +54,12 @@ public class ToDoData {
 
 
     public static List<ListItem> getListData() {
+
+
         List<ListItem> data = new ArrayList<>();
 
-        for (int x = 0; x < 4; x++) {
+
+        for (int x = 0; x < 10; x++) {
             for (int i = 0; i < titles.length && i < icons.length; i++) {
                 ListItem item = new ListItem();
                 item.setImageResId(icons[i]);
@@ -54,13 +68,14 @@ public class ToDoData {
                 item.setImageResId(icon);
                 data.add(item);
             }
+
+        }
+            return data;
         }
 
-        return data;
-    }
 
-    public static ListItem getRandomListItem() {
-        int random = new Random().nextInt(6);
+/*    public ListItem getRandomListItem() {
+        int random = new Random(4);
 
         ListItem item = new ListItem();
 
@@ -69,6 +84,6 @@ public class ToDoData {
         item.setImageResId(icon);
         return item;
 
-    }
+    }*/
 
 }

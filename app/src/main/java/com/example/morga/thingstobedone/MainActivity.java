@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements ToDoAdapter.ItemC
 
 
                 Snackbar snackbar = Snackbar
-                        .make(coordinatorLayout, "New todo added", Snackbar.LENGTH_LONG);
+                        .make(coordinatorLayout, "New thing to be done added", Snackbar.LENGTH_LONG);
 
                 snackbar.show();
                 //Toast.makeText(getBaseContext(), "Added newtodo", Toast.LENGTH_SHORT).show();

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity  {
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Things to be done");
+        collapsingToolbar.setTitle("Things to do");
 
         myDataBase = FirebaseDatabase.getInstance().getReference();
         myListItemRef = myDataBase.child("ListItems");
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
                 Snackbar snackbar = Snackbar
-                        .make(coordinatorLayout, "New thing to be done added", Snackbar.LENGTH_LONG);
+                        .make(coordinatorLayout, "New thing to do added", Snackbar.LENGTH_LONG);
                 snackbar.show();
 
             }

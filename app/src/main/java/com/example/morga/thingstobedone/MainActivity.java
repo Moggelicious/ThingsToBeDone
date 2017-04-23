@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity   {
 
     private final String TAG = "ListActivity";
     DatabaseReference myDataBase;

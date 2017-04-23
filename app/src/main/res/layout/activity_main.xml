@@ -65,7 +65,8 @@
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:clickable="true"
-        android:elevation="4dp"
+        android:elevation="6dp"
+
         android:onClick="newItem"
         android:src="@drawable/ic_create_black_24dp"
         app:fabSize="normal" />

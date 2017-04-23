@@ -100,9 +100,11 @@ public class MainActivity extends AppCompatActivity   {
         myAdapter = new ListItemsAdapter(myListItems);
         myRecyclerView.setAdapter(myAdapter);
 
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(myAdapter);
+        ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(myAdapter);
         myItemTouchHelper = new ItemTouchHelper(callback);
         myItemTouchHelper.attachToRecyclerView(myRecyclerView);
+
 
 
         updateUI();

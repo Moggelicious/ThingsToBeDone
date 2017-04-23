@@ -15,7 +15,7 @@ import com.example.morga.thingstobedone.ItemTouchHelperAdapter;
 
 public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsHolder> implements ItemTouchHelperAdapter {
 
-    private ArrayList<ListItem> myListItems;
+     ArrayList<ListItem> myListItems;
 
     public ListItemsAdapter(ArrayList<ListItem> ListItems) {
         myListItems = ListItems;
@@ -48,6 +48,7 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsHolder> impl
                 Collections.swap(myListItems, i, i - 1);
             }
         }
+
         notifyItemMoved(fromPosition, toPosition);
         return true;
 

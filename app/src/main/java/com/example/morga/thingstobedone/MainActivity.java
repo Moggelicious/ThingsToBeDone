@@ -54,12 +54,14 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity   {
 
+
     private final String TAG = "ListActivity";
     DatabaseReference myDataBase;
     DatabaseReference myListItemRef;
-    private RecyclerView myRecyclerView;
-    private ListItemsAdapter myAdapter;
-    private ArrayList<ListItem> myListItems;
+     private RecyclerView myRecyclerView;
+  ListItemsAdapter myAdapter;
+     private ArrayList<ListItem> myListItems;
+    private ItemTouchHelper myItemTouchHelper;
 
 
 
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity   {
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
+
         }
 
 
@@ -89,6 +94,17 @@ public class MainActivity extends AppCompatActivity   {
         myRecyclerView = (RecyclerView)findViewById(R.id.recycler_list);
         //myRecyclerView.addItemDecoration(new DividerItemDecoration(Activity().LinearLayoutManager.VERTICAL));
         myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+
+        myAdapter = new ListItemsAdapter(myListItems);
+        myRecyclerView.setAdapter(myAdapter);
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(myAdapter);
+        myItemTouchHelper = new ItemTouchHelper(callback);
+        myItemTouchHelper.attachToRecyclerView(myRecyclerView);
+
+
         updateUI();
 
 
@@ -229,41 +245,7 @@ public class MainActivity extends AppCompatActivity   {
         myRecyclerView.setAdapter(myAdapter);
     }
 
-    private class ListItemsHolder extends RecyclerView.ViewHolder{
-        public TextView titleTextView;
-        public TextView subTitleTextView;
-        public ListItemsHolder(View itemView){
-            super(itemView);
-            titleTextView = (TextView) itemView.findViewById(R.id.lbl_item_text);
-            subTitleTextView = (TextView) itemView.findViewById(R.id.lbl_item_sub_title);
-        }
 
-        public void bindData(ListItem s){
-            titleTextView.setText(s.getTitle());
-            subTitleTextView.setText(s.getSubTitle());         }
-    }
-    private class ListItemsAdapter extends RecyclerView.Adapter<ListItemsHolder>{
-        private ArrayList<ListItem> myListItems;
-        public ListItemsAdapter(ArrayList<ListItem> ListItems){
-            myListItems = ListItems;
-        }
-        @Override
-        public ListItemsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
-            View view = layoutInflater.inflate(R.layout.list_item,parent,false);
-            return new ListItemsHolder(view);
-        }
-        @Override
-        public void onBindViewHolder(ListItemsHolder holder, int position) {
-            ListItem s = myListItems.get(position);
-            holder.bindData(s);
-
-        }
-        @Override
-        public int getItemCount() {
-            return myListItems.size();
-        }
     }
 
 
-}

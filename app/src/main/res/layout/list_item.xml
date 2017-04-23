@@ -25,12 +25,11 @@
         android:layout_marginLeft="72dp"
         android:layout_marginRight="48dp"
         android:ellipsize="end"
-        android:fontFamily="sans-serif"
+        android:fontFamily="roboto"
         android:maxLines="1"
-
         android:text="Sois comme l'eau mon ami"
-        android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:textColor="#ff8000"
+        android:textSize="22sp" />
      
     <TextView
         android:id="@+id/lbl_item_sub_title"

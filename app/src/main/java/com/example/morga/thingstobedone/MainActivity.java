@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.solver.widgets.Snapshot;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -21,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.transition.Fade;
@@ -39,6 +41,8 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,15 +76,16 @@ public class MainActivity extends AppCompatActivity   {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-
-
         }
+
+
 
 
 
@@ -121,6 +126,8 @@ public class MainActivity extends AppCompatActivity   {
                 fetchData(dataSnapshot);
             }
 
+
+
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAG + "Changed", dataSnapshot.getValue(ListItem.class).toString());
@@ -141,6 +148,13 @@ public class MainActivity extends AppCompatActivity   {
                 Log.d(TAG + "Cancelled", databaseError.toString());
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
 
@@ -209,6 +223,7 @@ public class MainActivity extends AppCompatActivity   {
                 childUpdates.put("/ListItems/" + key, ItemValues);
                 FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
 
+
                 if (TextUtils.isEmpty(title)) {
                     Snackbar snackbar = Snackbar
                             .make(coordinatorLayout, "Please Enter a title", Snackbar.LENGTH_LONG);
@@ -226,15 +241,22 @@ public class MainActivity extends AppCompatActivity   {
         dialog.show();
         hideSoftKeyboard(this);
 
+        Log.d("TAG", "key" +key);
+
+
+
     }
 
 
-    public void deleteAllListItems(){
+    public void ActionDelete(MenuItem action_delete ){
         FirebaseDatabase.getInstance().getReference().child("ListItems").removeValue();
         myListItems.clear();
         myAdapter.notifyDataSetChanged();
-        Toast.makeText(this,"Items Deleted Successfully",Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "Everything is gone", Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
+
 
     private void fetchData(DataSnapshot dataSnapshot) {
         ListItem listItem = dataSnapshot.getValue(ListItem.class);

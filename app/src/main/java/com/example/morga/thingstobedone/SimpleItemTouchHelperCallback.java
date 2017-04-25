@@ -9,8 +9,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
-    private  ItemTouchHelperAdapter mAdapter;
-
+    private ItemTouchHelperAdapter mAdapter;
 
 
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
@@ -52,7 +51,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
 
-
     @Override
 
     public void onSwiped(RecyclerView.ViewHolder ListItemsHolder, int direction) {
@@ -60,7 +58,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         mAdapter.onItemDismiss(ListItemsHolder.getAdapterPosition());
 
     }
-
 
 
 }

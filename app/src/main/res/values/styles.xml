@@ -7,6 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+        <style name="ActionBarPopupTheme">
+            <item name="android:textColor">@color/colorPrimary</item>
+            <item name="android:background">#fff</item>
+        </style>
 
     </style>
 

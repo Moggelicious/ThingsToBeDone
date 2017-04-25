@@ -3,6 +3,7 @@ package com.example.morga.thingstobedone;
 /**
  * Created by Morga on 2017-03-20.
  */
+
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class ListItem {
     private int imageResId;
     private boolean favourite = false;
 
-    public ListItem(){
+    public ListItem() {
 
     }
 
@@ -68,8 +69,8 @@ public class ListItem {
 
     }
 
-    public String toString(){
-        return this.title +this.subTitle;
+    public String toString() {
+        return this.title + this.subTitle;
     }
 
 
@@ -77,7 +78,7 @@ public class ListItem {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("title", title);
-        result.put("subTitle",subTitle);
+        result.put("subTitle", subTitle);
         return result;
 
     }

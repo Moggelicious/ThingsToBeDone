@@ -1,13 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.morga.thingstobedone.MainActivity">
+    tools:context="com.example.morga.thingstobedone.MainActivity"
 
+    >
 
     <item
-    android:id="@+id/action_delete"
-    android:icon="@drawable/ic_inbox_black_36dp"
-    android:onClick="ActionDelete"
-    android:title="Delete All"
-    app:showAsAction="collapseActionView"/>
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_inbox_black_36dp"
+        android:onClick="ActionDelete"
+        android:title="Delete All"
+        app:showAsAction="collapseActionView"/>
 </menu>

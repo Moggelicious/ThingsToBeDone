@@ -61,9 +61,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
 
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Things to do");
+
 
         myDataBase = FirebaseDatabase.getInstance().getReference();
         myListItemRef = myDataBase.child("ListItems");

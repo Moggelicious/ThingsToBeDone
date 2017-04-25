@@ -20,9 +20,9 @@ public class DetailActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getBundleExtra(BUNDLE_EXTRAS);
 
-        ((TextView)findViewById(R.id.lbl_quote_text)).setText(extras.getString(EXTRA_QUOTE));
-        ((TextView)findViewById(R.id.lbl_quote_attribution)).setText(extras.getString(EXTRA_ATTR));
-        ((ImageView)findViewById(R.id.im_detail_image)).setImageDrawable(
+        ((TextView) findViewById(R.id.lbl_quote_text)).setText(extras.getString(EXTRA_QUOTE));
+        ((TextView) findViewById(R.id.lbl_quote_attribution)).setText(extras.getString(EXTRA_ATTR));
+        ((ImageView) findViewById(R.id.im_detail_image)).setImageDrawable(
                 ContextCompat.getDrawable(this, extras.getInt(EXTRA_IMAGE_RES_ID)));
     }
 }

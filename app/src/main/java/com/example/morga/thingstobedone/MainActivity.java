@@ -34,7 +34,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,18 +58,16 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity   {
+public class MainActivity extends AppCompatActivity{
 
-
+    Boolean flag=false;
     private final String TAG = "ListActivity";
     DatabaseReference myDataBase;
     DatabaseReference myListItemRef;
-     private RecyclerView myRecyclerView;
-  ListItemsAdapter myAdapter;
-     private ArrayList<ListItem> myListItems;
+    private RecyclerView myRecyclerView;
+    ListItemsAdapter myAdapter;
+    private ArrayList<ListItem> myListItems;
     private ItemTouchHelper myItemTouchHelper;
-
-
 
 
     private CoordinatorLayout coordinatorLayout;
@@ -86,9 +86,6 @@ public class MainActivity extends AppCompatActivity   {
         }
 
 
-
-
-
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Things to do");
@@ -96,10 +93,9 @@ public class MainActivity extends AppCompatActivity   {
         myDataBase = FirebaseDatabase.getInstance().getReference();
         myListItemRef = myDataBase.child("ListItems");
         myListItems = new ArrayList<>();
-        myRecyclerView = (RecyclerView)findViewById(R.id.recycler_list);
+        myRecyclerView = (RecyclerView) findViewById(R.id.recycler_list);
         //myRecyclerView.addItemDecoration(new DividerItemDecoration(Activity().LinearLayoutManager.VERTICAL));
         myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
 
         myAdapter = new ListItemsAdapter(myListItems);
@@ -110,10 +106,7 @@ public class MainActivity extends AppCompatActivity   {
         myItemTouchHelper = new ItemTouchHelper(callback);
         myItemTouchHelper.attachToRecyclerView(myRecyclerView);
 
-
-
         updateUI();
-
 
         myListItemRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -121,11 +114,8 @@ public class MainActivity extends AppCompatActivity   {
                 Log.d(TAG + "Added", dataSnapshot.getValue(ListItem.class).toString());
 
 
-
-
                 fetchData(dataSnapshot);
             }
-
 
 
             @Override
@@ -148,7 +138,9 @@ public class MainActivity extends AppCompatActivity   {
                 Log.d(TAG + "Cancelled", databaseError.toString());
             }
         });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -160,6 +152,7 @@ public class MainActivity extends AppCompatActivity   {
 
 
 
+/*
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
@@ -168,9 +161,32 @@ public class MainActivity extends AppCompatActivity   {
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+*/
+    public void showItem(View view) {
 
 
 
+
+        LayoutInflater myInflater = LayoutInflater.from(this);
+        View alertLayout = myInflater.inflate(R.layout.show_item, null);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setView(alertLayout);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Work in progress", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+
+            }
+        });
+
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
 
 
     public void newItem(View view) {
@@ -190,7 +206,6 @@ public class MainActivity extends AppCompatActivity   {
         final EditText userInputSubTitle = (EditText) alertLayout.findViewById(R.id.item_sub_title);
 
 
-
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
@@ -198,10 +213,8 @@ public class MainActivity extends AppCompatActivity   {
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, "Cancelled", Snackbar.LENGTH_LONG);
 
-
                 snackbar.show();
 
-                //Toast.makeText(getBaseContext(), "Cancel", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -214,41 +227,42 @@ public class MainActivity extends AppCompatActivity   {
                 String title = userInputTitle.getText().toString().trim();
                 String subTitle = userInputSubTitle.getText().toString().trim();
 
-                ListItem listItem = new ListItem();
 
-                listItem.setTitle(title);
-                listItem.setSubTitle(subTitle);
-                Map<String, Object> ItemValues = listItem.toMap();
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("/ListItems/" + key, ItemValues);
-                FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
+                if (userInputTitle.getText().toString().isEmpty()) {
 
 
-                if (TextUtils.isEmpty(title)) {
                     Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "Please Enter a title", Snackbar.LENGTH_LONG);
+                            .make(coordinatorLayout, "Doing nothing is doing something", Snackbar.LENGTH_LONG);
                     snackbar.show();
                     return;
+                } else {
+
+                    ListItem listItem = new ListItem();
+
+                    listItem.setTitle(title);
+                    listItem.setSubTitle(subTitle);
+                    Map<String, Object> ItemValues = listItem.toMap();
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/ListItems/" + key, ItemValues);
+                    FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
+
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "New thing to do added", Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
-
-                Snackbar snackbar = Snackbar
-                        .make(coordinatorLayout, "New thing to do added", Snackbar.LENGTH_LONG);
-                snackbar.show();
-
             }
         });
         AlertDialog dialog = alert.create();
         dialog.show();
-        hideSoftKeyboard(this);
+        //hideSoftKeyboard(this);
 
-        Log.d("TAG", "key" +key);
-
+        Log.d("TAG", "key" + key);
 
 
     }
 
 
-    public void ActionDelete(MenuItem action_delete ){
+    public void ActionDelete(MenuItem action_delete) {
         FirebaseDatabase.getInstance().getReference().child("ListItems").removeValue();
         myListItems.clear();
         myAdapter.notifyDataSetChanged();
@@ -264,12 +278,23 @@ public class MainActivity extends AppCompatActivity   {
         updateUI();
     }
 
-    private void updateUI(){
+    private void updateUI() {
         myAdapter = new ListItemsAdapter(myListItems);
         myRecyclerView.setAdapter(myAdapter);
     }
 
+    public void change_image(View v) {
+        ImageView iv = (ImageView) findViewById(R.id.im_item_icon_secondary);
+        //use flag to change image
+        if (flag == false) {
+            iv.setImageResource(R.drawable.ic_star_border_black_24dp);
+            flag = true;
+        } else {
+            iv.setImageResource(R.drawable.ic_star_black_24dp);
+            flag = false;
+        }
 
     }
+}
 
 

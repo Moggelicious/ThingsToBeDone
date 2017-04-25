@@ -9,14 +9,18 @@ import android.widget.TextView;
  */
 
 public  class ListItemsHolder extends RecyclerView.ViewHolder{
+
     public TextView titleTextView;
     public TextView subTitleTextView;
+
+
 
 
     public ListItemsHolder(View itemView){
         super(itemView);
         titleTextView = (TextView) itemView.findViewById(R.id.lbl_item_text);
         subTitleTextView = (TextView) itemView.findViewById(R.id.lbl_item_sub_title);
+
     }
 
     public void bindData(ListItem s){

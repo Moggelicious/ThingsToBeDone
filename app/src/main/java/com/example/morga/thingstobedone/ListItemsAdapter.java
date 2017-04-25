@@ -8,17 +8,23 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import com.example.morga.thingstobedone.ItemTouchHelperAdapter;
+
 /**
  * Created by Morga on 2017-04-23.
  */
 
 public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsHolder> implements ItemTouchHelperAdapter {
-
-     ArrayList<ListItem> myListItems;
+    private ItemClickCallback itemClickCallback;
+    ArrayList<ListItem> myListItems;
 
     public ListItemsAdapter(ArrayList<ListItem> ListItems) {
         myListItems = ListItems;
+    }
+    public interface ItemClickCallback {
+        void onItemClick(View v, int p);
+        void onSecondaryIconClick(int p);
     }
 
 
@@ -29,6 +35,29 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsHolder> impl
         return new ListItemsHolder(view);
     }
 
+    private ItemTouchHelper.Callback createHelperCallback() {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                        return true;
+                    }
+
+                    @Override
+                    public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        onItemDismiss(viewHolder.getAdapterPosition());
+                        myListItems.remove(myListItems);
+                    }
+                };
+        return simpleItemTouchCallback;
+    }
+
+
+
     @Override
     public void onBindViewHolder(ListItemsHolder holder, int position) {
         ListItem s = myListItems.get(position);
@@ -38,7 +67,7 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsHolder> impl
 
 
     @Override
-    public  boolean onItemMove(int fromPosition, int toPosition) {
+    public boolean onItemMove(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
                 Collections.swap(myListItems, i, i + 1);
@@ -49,13 +78,13 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsHolder> impl
             }
         }
 
-        notifyItemMoved(fromPosition, toPosition);
         return true;
 
     }
 
     @Override
-    public void onItemDismiss(int position) {
+    public void onItemDismiss(final int position) {
+        myListItems.remove(myListItems);
 
     }
 
@@ -63,4 +92,6 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsHolder> impl
     public int getItemCount() {
         return myListItems.size();
     }
+
+
 }
